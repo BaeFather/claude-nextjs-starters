@@ -1,239 +1,157 @@
-"use client"
+import Link from "next/link"
+import { Layers, Palette, Shield, Zap } from "lucide-react"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton"
 import { Container } from "@/components/layout/container"
 
-const formSchema = z.object({
-  email: z.string().email({ message: "올바른 이메일 주소를 입력해주세요." }),
-  name: z.string().min(2, { message: "이름은 2자 이상이어야 합니다." }),
-})
+const coreStack = [
+  {
+    icon: Zap,
+    name: "Next.js 16",
+    desc: "App Router 기반 풀스택 프레임워크",
+  },
+  {
+    icon: Shield,
+    name: "TypeScript",
+    desc: "엄격한 타입으로 안전한 코드 작성",
+  },
+  {
+    icon: Palette,
+    name: "Tailwind CSS v4",
+    desc: "CSS 변수 기반 유틸리티 스타일링",
+  },
+  {
+    icon: Layers,
+    name: "shadcn/ui",
+    desc: "접근성 높은 UI 컴포넌트 라이브러리",
+  },
+]
 
-function ContactForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { email: "", name: "" },
-  })
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    toast.success(`${values.name}님, 제출되었습니다!`)
-    form.reset()
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>이름</FormLabel>
-              <FormControl>
-                <Input placeholder="홍길동" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>이메일</FormLabel>
-              <FormControl>
-                <Input placeholder="hello@example.com" type="email" {...field} />
-              </FormControl>
-              <FormDescription>수신용 이메일 주소를 입력해주세요.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full">제출하기</Button>
-      </form>
-    </Form>
-  )
-}
+const features = [
+  {
+    title: "🎨 shadcn/ui",
+    description: "radix-nova 스타일의 접근성 높은 UI 컴포넌트가 기본 설치되어 있습니다.",
+    badge: "UI",
+  },
+  {
+    title: "🌙 다크모드",
+    description: "next-themes 기반으로 라이트/다크/시스템 테마를 즉시 전환할 수 있습니다.",
+    badge: "UX",
+  },
+  {
+    title: "✅ 폼 유효성 검증",
+    description: "react-hook-form + zod 스키마 기반 폼이 사전 구성되어 있습니다.",
+    badge: "DX",
+  },
+  {
+    title: "💨 Tailwind CSS v4",
+    description: "CSS 변수 기반 디자인 토큰과 oklch 색공간으로 일관된 스타일링을 지원합니다.",
+    badge: "스타일",
+  },
+  {
+    title: "🔷 TypeScript",
+    description: "엄격한 타입 설정으로 안전하고 예측 가능한 코드를 작성할 수 있습니다.",
+    badge: "타입",
+  },
+  {
+    title: "⚡ React Compiler",
+    description: "Next.js 16 + React Compiler로 자동 메모이제이션 최적화가 적용됩니다.",
+    badge: "성능",
+  },
+  {
+    title: "🪝 usehooks-ts",
+    description: "useLocalStorage, useDebounceValue 등 타입세이프 커스텀 훅이 바로 사용 가능합니다.",
+    badge: "훅",
+  },
+  {
+    title: "🔔 토스트 알림",
+    description: "Sonner 기반의 간결하고 세련된 토스트 알림 시스템이 내장되어 있습니다.",
+    badge: "알림",
+  },
+  {
+    title: "📱 반응형 레이아웃",
+    description: "모바일·데스크톱을 모두 지원하는 헤더·콘텐츠·푸터 레이아웃이 사전 구성되어 있습니다.",
+    badge: "레이아웃",
+  },
+]
 
 export default function Home() {
   return (
     <div className="py-16">
       <Container className="space-y-16">
-        {/* Hero */}
-        <section className="space-y-4 text-center">
+        {/* 섹션 1 — 히어로 */}
+        <section className="space-y-8 text-center">
           <Badge variant="secondary">Next.js 스타터킷</Badge>
-          <h1 className="text-4xl font-bold tracking-tight">모던 웹 개발의 시작점</h1>
-          <p className="mx-auto max-w-xl text-lg text-muted-foreground">
-            Next.js 16 · TypeScript · Tailwind CSS v4 · shadcn/ui · react-hook-form · zod · usehooks-ts
+          <h1 className="text-5xl font-extrabold leading-tight tracking-tight md:text-6xl">
+            모던 웹 개발의 시작점
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+            검증된 기술 스택으로 즉시 프로덕션에 투입할 수 있는 Next.js 스타터킷입니다.
+            <br />
+            반복적인 초기 설정 없이 핵심 기능 개발에 집중하세요.
           </p>
-          <div className="flex justify-center gap-3">
-            <Button>시작하기</Button>
-            <Button variant="outline">문서 보기</Button>
-          </div>
-        </section>
 
-        <Separator />
-
-        {/* Cards */}
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">컴포넌트 미리보기</h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
-                    <AvatarFallback>SC</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <CardTitle className="text-base">shadcn</CardTitle>
-                    <CardDescription>UI 컴포넌트</CardDescription>
-                  </div>
+          {/* 핵심 기술 4종 */}
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {coreStack.map(({ icon: Icon, name, desc }) => (
+              <div key={name} className="flex flex-col items-center gap-2 py-4 text-center">
+                <Icon className="size-7 text-muted-foreground" />
+                <div>
+                  <p className="text-sm font-semibold">{name}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{desc}</p>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  radix-nova 스타일의 shadcn/ui 컴포넌트가 기본으로 설치되어 있습니다.
-                </p>
-              </CardContent>
-              <CardFooter className="gap-2">
-                <Badge>UI</Badge>
-                <Badge variant="secondary">Radix</Badge>
-              </CardFooter>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">다크모드</CardTitle>
-                <CardDescription>next-themes 연동</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  우측 상단 토글로 라이트/다크/시스템 테마를 전환할 수 있습니다.
-                </p>
-              </CardContent>
-              <CardFooter>
-                <Badge variant="secondary">next-themes</Badge>
-              </CardFooter>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">폼 유효성 검증</CardTitle>
-                <CardDescription>react-hook-form + zod</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  스키마 기반 폼 유효성 검증이 준비되어 있습니다. 아래 예시를 확인하세요.
-                </p>
-              </CardContent>
-              <CardFooter className="gap-2">
-                <Badge variant="secondary">zod</Badge>
-                <Badge variant="secondary">RHF</Badge>
-              </CardFooter>
-            </Card>
+              </div>
+            ))}
           </div>
         </section>
 
         <Separator />
 
-        {/* Form + Dialog */}
-        <section className="grid gap-8 md:grid-cols-2">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">폼 예시</h2>
-            <Card>
-              <CardContent className="pt-6">
-                <ContactForm />
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">기타 컴포넌트</h2>
-            <div className="space-y-4">
-              {/* Dialog */}
-              <Card>
+        {/* 섹션 2 — 포함된 기능 */}
+        <section className="space-y-6">
+          <h2 className="text-2xl font-semibold">주요 기능</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => (
+              <Card key={f.title}>
                 <CardHeader>
-                  <CardTitle className="text-base">Dialog</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline">다이얼로그 열기</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>안녕하세요!</DialogTitle>
-                        <DialogDescription>
-                          shadcn/ui Dialog 컴포넌트가 정상 동작합니다.
-                        </DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
-                </CardContent>
-              </Card>
-
-              {/* Toast */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Toast (Sonner)</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" onClick={() => toast("기본 알림입니다.")}>기본</Button>
-                  <Button variant="outline" size="sm" onClick={() => toast.success("성공!")}>성공</Button>
-                  <Button variant="outline" size="sm" onClick={() => toast.error("오류 발생!")}>오류</Button>
-                </CardContent>
-              </Card>
-
-              {/* Skeleton */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Skeleton</CardTitle>
-                </CardHeader>
-                <CardContent className="flex items-center gap-4">
-                  <Skeleton className="size-10 rounded-full" />
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-32" />
-                    <Skeleton className="h-4 w-24" />
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base">{f.title}</CardTitle>
+                    <Badge variant="secondary">{f.badge}</Badge>
                   </div>
-                </CardContent>
+                  <CardDescription>{f.description}</CardDescription>
+                </CardHeader>
+                <CardContent />
               </Card>
-            </div>
+            ))}
+          </div>
+        </section>
+
+        <Separator />
+
+        {/* 섹션 3 — 시작하기 */}
+        <section className="flex flex-col items-center gap-6 text-center">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold">지금 바로 시작하세요</h2>
+            <p className="text-muted-foreground">
+              예제로 컴포넌트를 확인하고, 문서에서 사용 방법을 알아보세요.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button asChild>
+              <Link href="/examples">예제 보기</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/docs">문서 보기</Link>
+            </Button>
           </div>
         </section>
       </Container>

@@ -4,9 +4,8 @@ export const siteConfig = {
   url: "https://example.com",
   nav: [
     { title: "홈", href: "/" },
-    { title: "소개", href: "/about" },
-    { title: "블로그", href: "/blog" },
-    { title: "문의", href: "/contact" },
+    { title: "예제", href: "/examples" },
+    { title: "문서", href: "/docs" },
   ],
   links: {
     github: "https://github.com",
