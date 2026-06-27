@@ -13,6 +13,8 @@ npm run dev      # 개발 서버 시작 (http://localhost:3000)
 npm run build    # 프로덕션 빌드
 npm run start    # 프로덕션 서버 시작
 npm run lint     # ESLint 실행
+npx playwright test          # E2E 테스트 전체 실행
+npx playwright test --ui     # Playwright UI 모드
 ```
 
 새 shadcn 컴포넌트 추가:
@@ -23,35 +25,6 @@ npx shadcn@latest add <component>
 ## 아키텍처 개요
 
 Next.js 16 App Router 기반 마케팅/콘텐츠형 스타터킷. 헤더 + 콘텐츠 + 푸터 레이아웃.
-
-### 디렉터리 구조
-
-```
-src/
-├─ app/
-│  ├─ layout.tsx          # ThemeProvider + SiteHeader + main + SiteFooter + Toaster
-│  ├─ page.tsx            # 컴포넌트 쇼케이스 (개발 참고용)
-│  └─ globals.css         # Tailwind v4 + 디자인 토큰 (CSS 변수)
-├─ components/
-│  ├─ ui/                 # shadcn/ui 프리미티브 + 복합 컴포넌트 (자동 생성, 수동 수정 가능)
-│  ├─ layout/             # container, site-header, site-footer
-│  ├─ common/             # mode-toggle (다크모드 토글)
-│  └─ providers/          # theme-provider (next-themes 래퍼)
-├─ config/
-│  └─ site.ts             # 사이트명/설명/URL/네비 링크 — 단일 소스 관리
-├─ hooks/                 # 커스텀 훅 (usehooks-ts 우선 활용 후 여기에 추가)
-└─ lib/
-   └─ utils.ts            # cn() — clsx + tailwind-merge
-```
-
-### 컴포넌트 계층
-
-| 계층 | 경로 | 설명 |
-|------|------|------|
-| Atoms | `components/ui/` | button, input, label, badge, avatar, separator, skeleton |
-| Molecules | `components/ui/` | card, form, dialog, dropdown-menu, sheet, sonner |
-| Common | `components/common/`, `components/providers/` | mode-toggle, theme-provider |
-| Layout | `components/layout/` | container, site-header, site-footer |
 
 ### 핵심 패턴
 
@@ -80,17 +53,32 @@ import { toast } from "sonner"
 toast.success("성공!")
 ```
 
-**사이트 정보**: 네비 링크·이름·설명은 `src/config/site.ts`에서만 수정
+**사이트 정보**: 네비 링크·이름·설명·URL은 `src/config/site.ts`에서만 수정
+
+### 다크모드 — 쿠키 기반 SSR
+
+`next-themes`를 사용하지 않고 커스텀 ThemeProvider(`src/components/providers/theme-provider.tsx`)를 직접 구현했다.
+
+흐름:
+1. `layout.tsx`(서버)가 `cookies()`로 `"theme"` 쿠키를 읽어 `initialTheme`으로 ThemeProvider에 전달
+2. ThemeProvider(클라이언트)가 `initialTheme`으로 초기 상태를 세팅 → hydration 깜빡임 없음
+3. 테마 변경 시 `localStorage`와 `document.cookie` 양쪽 동기화
+
+다크모드 훅은 `useTheme()`을 ThemeProvider에서 직접 import:
+```ts
+import { useTheme } from "@/components/providers/theme-provider"
+const { theme, setTheme, resolvedTheme } = useTheme()
+```
 
 ### 스타일링
 
 - Tailwind CSS v4 (`@import "tailwindcss"`) + `tw-animate-css` + `shadcn/tailwind.css`
 - CSS 변수 기반 디자인 토큰 (`globals.css`의 `:root` / `.dark` 블록), oklch 색공간
-- 다크모드: `.dark` 클래스 방식 (`next-themes`의 `attribute="class"`)
+- 다크모드: `.dark` 클래스 토글 방식 (`globals.css`의 `@custom-variant dark (&:is(.dark *))`)
 - 폰트: `--font-geist-sans` → CSS 변수 `--font-sans`로 연결됨
 
 ### 주요 설정
 
-- React Compiler 활성화 (`next.config.ts`)
+- React Compiler 활성화 (`next.config.ts`) — 수동 `useMemo`/`useCallback` 불필요
 - shadcn 설정: `components.json` (style: `radix-nova`, iconLibrary: `lucide`)
-- 다크모드: `layout.tsx`의 `ThemeProvider`에서 `defaultTheme="system"` 설정
+- `lang="ko"` 고정 (`layout.tsx`)

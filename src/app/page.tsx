@@ -1,11 +1,10 @@
 import Link from "next/link"
-import { Layers, Palette, Shield, Zap } from "lucide-react"
+import { Anchor, Bell, Blocks, ClipboardCheck, Layers, MonitorSmartphone, MoonStar, Palette, Shield, ShieldCheck, Zap } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -38,49 +37,49 @@ const coreStack = [
 
 const features = [
   {
-    title: "🎨 shadcn/ui",
-    description: "radix-nova 스타일의 접근성 높은 UI 컴포넌트가 기본 설치되어 있습니다.",
-    badge: "UI",
+    icon: Blocks,
+    title: "shadcn/ui",
+    description: "코드를 직접 소유하는 컴포넌트라 원하는 대로 뜯어고치고, 접근성은 기본으로 챙깁니다.",
   },
   {
-    title: "🌙 다크모드",
-    description: "next-themes 기반으로 라이트/다크/시스템 테마를 즉시 전환할 수 있습니다.",
-    badge: "UX",
+    icon: MoonStar,
+    title: "다크모드",
+    description: "쿠키 기반 SSR 처리로 새로고침해도 화면 깜빡임 없이 테마가 그대로 유지됩니다.",
   },
   {
-    title: "✅ 폼 유효성 검증",
-    description: "react-hook-form + zod 스키마 기반 폼이 사전 구성되어 있습니다.",
-    badge: "DX",
+    icon: ClipboardCheck,
+    title: "폼 유효성 검증",
+    description: "react-hook-form과 zod가 맞물려, 검증 규칙 하나로 입력값과 타입을 동시에 지킵니다.",
   },
   {
-    title: "💨 Tailwind CSS v4",
-    description: "CSS 변수 기반 디자인 토큰과 oklch 색공간으로 일관된 스타일링을 지원합니다.",
-    badge: "스타일",
+    icon: Palette,
+    title: "Tailwind CSS v4",
+    description: "CSS 변수 토큰으로 색·간격을 한 곳에서 관리해 디자인이 흐트러지지 않습니다.",
   },
   {
-    title: "🔷 TypeScript",
-    description: "엄격한 타입 설정으로 안전하고 예측 가능한 코드를 작성할 수 있습니다.",
-    badge: "타입",
+    icon: ShieldCheck,
+    title: "TypeScript",
+    description: "자동완성과 타입 검사로 리팩터링이 두렵지 않고, 런타임 전에 버그를 잡습니다.",
   },
   {
-    title: "⚡ React Compiler",
-    description: "Next.js 16 + React Compiler로 자동 메모이제이션 최적화가 적용됩니다.",
-    badge: "성능",
+    icon: Zap,
+    title: "React Compiler",
+    description: "수동 useMemo·useCallback 없이 컴파일러가 메모이제이션해 불필요한 렌더링을 줄입니다.",
   },
   {
-    title: "🪝 usehooks-ts",
-    description: "useLocalStorage, useDebounceValue 등 타입세이프 커스텀 훅이 바로 사용 가능합니다.",
-    badge: "훅",
+    icon: Anchor,
+    title: "usehooks-ts",
+    description: "useLocalStorage·useDebounceValue 등 검증된 훅을 바로 써서 보일러플레이트를 줄입니다.",
   },
   {
-    title: "🔔 토스트 알림",
-    description: "Sonner 기반의 간결하고 세련된 토스트 알림 시스템이 내장되어 있습니다.",
-    badge: "알림",
+    icon: Bell,
+    title: "토스트 알림",
+    description: "Sonner로 한 줄 호출만에 성공·에러 피드백을 사용자에게 즉시 띄웁니다.",
   },
   {
-    title: "📱 반응형 레이아웃",
-    description: "모바일·데스크톱을 모두 지원하는 헤더·콘텐츠·푸터 레이아웃이 사전 구성되어 있습니다.",
-    badge: "레이아웃",
+    icon: MonitorSmartphone,
+    title: "반응형 레이아웃",
+    description: "헤더·콘텐츠·푸터가 모바일과 데스크톱에서 모두 자연스럽게 동작합니다.",
   },
 ]
 
@@ -120,16 +119,13 @@ export default function Home() {
         <section className="space-y-6">
           <h2 className="text-2xl font-semibold">주요 기능</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f) => (
-              <Card key={f.title}>
+            {features.map(({ icon: Icon, title, description }) => (
+              <Card key={title}>
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-base">{f.title}</CardTitle>
-                    <Badge variant="secondary">{f.badge}</Badge>
-                  </div>
-                  <CardDescription>{f.description}</CardDescription>
+                  <Icon className="size-6 text-muted-foreground" />
+                  <CardTitle className="text-base">{title}</CardTitle>
+                  <CardDescription>{description}</CardDescription>
                 </CardHeader>
-                <CardContent />
               </Card>
             ))}
           </div>

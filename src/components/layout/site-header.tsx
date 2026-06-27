@@ -35,13 +35,16 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Container className="flex h-14 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          {siteConfig.name}
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center gap-2 font-semibold">
+            {siteConfig.name}
+          </Link>
 
-        {/* 데스크톱 네비 (md 이상) */}
+          {/* 데스크톱 네비 (md 이상) */}
+          <NavLinks className="hidden md:flex items-center gap-6" />
+        </div>
+
         <div className="hidden md:flex items-center gap-6">
-          <NavLinks className="flex items-center gap-6" />
           <ModeToggle />
         </div>
 
